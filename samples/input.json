@@ -1,0 +1,22 @@
+{
+    "githubWikis" : [
+                "https://github.com/Azure/CCOInsights/wiki",
+                "https://github.com/Azure/CCOInsights/wiki/Infrastructure-Dashboard",
+                "https://github.com/Azure/CCOInsights/wiki/Infrastructure-Dashboard-Deployment%20Guide",
+                "https://github.com/Azure/CCOInsights/wiki/Infrastructure-Dashboard-Reports",
+                "https://github.com/Azure/CCOInsights/wiki/Governance%20Dashboard",
+                "https://github.com/Azure/CCOInsights/wiki/Governance%20Dashboard%20-%20Deployment%20Guide",
+                "https://github.com/Azure/CCOInsights/wiki/Governance%20Dashboard%20-%20Reports",
+                "https://github.com/Azure/CCOInsights/wiki/ADO%20Dashboard",
+                "https://github.com/Azure/CCOInsights/wiki/ADO%20Dashboard%20-%20Deployment%20Guide",
+                "https://github.com/Azure/CCOInsights/wiki/ADO%20Dashboard%20-%20Reports",
+                "https://github.com/Azure/CCOInsights/wiki/Troubleshooting%20Guide",
+                "https://github.com/Azure/CCOInsights/wiki/Release%20Notes"
+            ],
+    "githubWikiBaseImageUrl": "https://github.com/Azure/CCOInsights/wiki/",
+    "githubRepo": "azure/ccoinsights",
+    "question": "### Pre-requirements\n- [X] Reviewed the Deployment guide\n- [X] Reviewed the Troubleshooting guide\n- [X] Reviewed the YouTube channel\n- [X] Reviewed the GitHub Issues list\n### What dashboard are you reporting an issue on?\nInfrastructure\n### What happened?\nI have the desktop version but somehow its not refreshing the Get Advisor Score table.\n![338879740-dc2777ac-f0f4-4b86-beab-ea6b21117cce](https:\/\/github.com\/Azure\/CCOInsights\/assets\/1135473/75838f91-4d8f-44a6-8895-db065559fc5d)\n### Steps to reproduce\nthe report was shared to me from a colleague who works as a Security analyst. As you can see in the picture its a different version than what you have in 5 of your Youtube videos. I just need help refreshing the data and specifically that table.",
+      "user": "jose",
+      "sessionId": "12345",
+      "historyMessages": []
+    }

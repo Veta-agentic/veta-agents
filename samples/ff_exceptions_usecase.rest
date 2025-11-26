@@ -1,0 +1,16 @@
+@host=http://localhost:8000
+POST {{host}}/fix/exceptions
+Content-Type: application/json
+X-API-Key: {{$dotenv API_KEYS}}
+
+{
+  "azureLogAnalyticsWorkspaceId": "{{$dotenv AZURE_LA_WORKSPACEID}}",
+  "azureClientId": "{{$dotenv AZURE_CLIENT_ID}}",
+  "azureTenantId": "{{$dotenv AZURE_TENANT_ID}}",
+  "azureClientSecret":  "{{$dotenv AZURE_CLIENT_SECRET}}",
+  "days": 1,
+  "user": "DrDonoso",
+  "sessionId": "30",
+  "historyMessages": null,
+  "githubRepo": "IAExperiments/DummyAPI"
+}

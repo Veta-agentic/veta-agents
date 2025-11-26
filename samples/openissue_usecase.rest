@@ -1,0 +1,27 @@
+@host=http://localhost:8000
+POST {{host}}/ask
+Content-Type: application/json
+X-API-Key: {{$dotenv API_KEYS}}
+
+{
+        "question": "### Help needed with\n\n### Pre-requirements\n\n- [X] Reviewed the Deployment guide\n- [X] Reviewed the Troubleshooting guide\n- [X] Reviewed the YouTube channel\n- [X] Reviewed the GitHub Issues list\n\n### What dashboard are you reporting an issue on?\n\nInfrastructure\n\n### What happened?\n\nDynamic queries don't allow refreshing data in published report, I don't remember it being like that last time I configured it.\n\n### Steps to reproduce\n\nCreate report on PBI desktop, Publish and try to configure auto refresh for data.\n\n### Additional context\n\n![image](https://github.com/user-attachments/assets/3bd3cd3b-23d7-4e6f-9659-b5dc4419e09c)",
+        "user": "DrDonoso",
+        "sessionId": "30",
+        "historyMessages": null,
+        "githubWikis": [
+                      "https://github.com/Azure/CCOInsights/wiki",
+                      "https://github.com/Azure/CCOInsights/wiki/Infrastructure-Dashboard",
+                      "https://github.com/Azure/CCOInsights/wiki/Infrastructure-Dashboard-Deployment%20Guide",
+                      "https://github.com/Azure/CCOInsights/wiki/Infrastructure-Dashboard-Reports",
+                      "https://github.com/Azure/CCOInsights/wiki/Governance%20Dashboard",
+                      "https://github.com/Azure/CCOInsights/wiki/Governance%20Dashboard%20-%20Deployment%20Guide",
+                      "https://github.com/Azure/CCOInsights/wiki/Governance%20Dashboard%20-%20Reports",
+                      "https://github.com/Azure/CCOInsights/wiki/ADO%20Dashboard",
+                      "https://github.com/Azure/CCOInsights/wiki/ADO%20Dashboard%20-%20Deployment%20Guide",
+                      "https://github.com/Azure/CCOInsights/wiki/ADO%20Dashboard%20-%20Reports",
+                      "https://github.com/Azure/CCOInsights/wiki/Troubleshooting%20Guide",
+                      "https://github.com/Azure/CCOInsights/wiki/Release%20Notes"
+                  ],
+        "githubWikiBaseImageUrl": "https://github.com/Azure/CCOInsights/wiki/",
+        "githubRepo": "azure/ccoinsights"
+      }

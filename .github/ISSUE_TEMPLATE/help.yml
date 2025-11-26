@@ -1,0 +1,18 @@
+---
+name: 🆘 Help requested
+description: Ask for help with a problem you're facing
+title: "[HELP] "
+labels: ['help wanted']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask your question here. Please provide as much context as possible to help us help you.
+
+  - type: textarea
+    attributes:
+      label: Help needed with
+      description: What do you need help with?
+      placeholder: Describe the problem you're facing
+    validations:
+      required: true

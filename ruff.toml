@@ -1,0 +1,29 @@
+line-length = 120
+
+[lint]
+select = [
+    "ANN001", # missing-type-function-argument
+    "ANN002", # missing-type-args
+    "ANN003", # missing-type-kwargs
+    "ANN201", # missing-return-type-undocumented-public-function
+    "ANN202", # missing-return-type-private-function
+    "ANN205", # missing-return-type-static-method
+    "ANN206", # missing-return-type-class-method
+    "ANN401", # any_type
+    "B904",   # raise-without-from-inside-except
+    "RSE102", # Unnecessary parentheses on raised exception
+    "T20",    # print_found,
+    "TRY002", # raise-vanilla-class
+
+    "C4",     # flake8-comprehensions
+    "E",      # pycodestyle errors
+    "F",      # pyflakes
+    "I",      # isort
+    "ICN",    # flake8-import-conventions
+    #"ISC",    # flake8-str-concat
+    "RET",    # flake8-return
+    "RUF",    # ruff 
+    "SIM",    # common simplification rules
+    "UP",     # pyupgrade
+    "W"       # pycodestyle warnings
+]

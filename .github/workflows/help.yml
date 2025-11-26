@@ -1,0 +1,63 @@
+---
+name: 🆘 Help wanted
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:    
+  run:
+    if: ${{ contains(github.event.issue.labels.*.name, 'help wanted') }}
+    runs-on: ubuntu-latest
+    name: 🚀 Run 
+    steps: 
+      - name: 🌐 Call URL
+        id: call_url
+        shell: bash
+        env:
+          QUESTION: ${{ github.event.issue.body }}
+        run: |            
+          FORMATTED_BODY=$(printf %s "${{ env.QUESTION }}" | sed ':a;N;$!ba;s/\n/\\n/g')
+
+          response=$(curl -s -o response.json -w "%{http_code}" -X POST -H "Content-Type: application/json" \
+          -H "X-API-Key: ${{ secrets.HTTP_API_KEY }}" \
+          -d '{
+                "question": "'"$FORMATTED_BODY"'",
+                "user": "${{ github.event.issue.user.login }}",
+                "sessionId": "${{ github.event.issue.number }}",
+                "historyMessages": null,
+                "githubWikis": ${{ vars.GH_WIKIS }},
+                "githubWikiBaseImageUrl": "${{ vars.GH_WIKI_BASEIMAGEURL}}",
+                "githubRepo": "${{ vars.GH_REPO }}"
+              }' \
+          ${{ vars.HTTP_URL }})
+          if [ "$response" -eq 200 ]; then
+            answer=$(jq -r '.answer' response.json)
+            echo "Outputting answer: $answer"
+          else
+            echo "Request failed with status $response"
+            exit 1
+          fi
+
+      - name: Response issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const response = JSON.parse(fs.readFileSync('response.json', 'utf8'));
+            github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `${response.answer}`
+              });
+
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['ai-answered']
+            });

@@ -1,0 +1,14 @@
+__pycache__/
+venv/
+env/
+ENV/
+.venv/
+.vscode/
+.git/
+.gitignore
+Dockerfile
+.dockerignore
+.github/
+.env
+.env.sample
+iac/
