@@ -1,54 +1,84 @@
-name: CI/CD Pipeline
+name: CD — Deploy to Production
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - 'Dockerfile'
       - 'app/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
       - '.github/workflows/deploy.yml'
 
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 env:
-  RESOURCE_GROUP: RSG-GHBot-285
-  ACR: containerregistryGHBot285.azurecr.io
-  APP_NAME: webapp-GHBot-285
+  IMAGE_NAME: veta-agents
 
 jobs:
-  build-and-push:
+  test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run pytest tests/ -v
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: 'Login via Azure CLI'
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Log in to Azure Container Registry
-      uses: azure/docker-login@v2
-      with:
-        login-server: ${{ env.ACR }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+      - name: Login to ACR
+        run: az acr login --name ${{ vars.ACR_NAME }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        push: true
-        tags: |
-          ${{ env.ACR }}/veta-agents:latest
-          ${{ env.ACR }}/veta-agents:${{ github.run_number }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v3
-      with:
-        resource-group-name: ${{ env.RESOURCE_GROUP }}
-        app-name: ${{ env.APP_NAME }}
-        images: '${{ env.ACR }}/veta-agents:${{ github.run_number }}'
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+            ${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.run_number }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          resource-group-name: ${{ vars.RESOURCE_GROUP }}
+          app-name: ${{ vars.WEB_APP_NAME }}
+          images: '${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.run_number }}'
+
+      - name: Health Check
+        run: |
+          echo "Waiting for deployment to stabilize..."
+          sleep 30
+          for i in $(seq 1 10); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://${{ vars.WEB_APP_NAME }}.azurewebsites.net/openapi.json" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Health check passed (HTTP 200)"
+              exit 0
+            fi
+            echo "Attempt $i/10 — HTTP $STATUS, retrying in 15s..."
+            sleep 15
+          done
+          echo "❌ Health check failed after 10 attempts"
+          exit 1
 
