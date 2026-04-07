@@ -15,13 +15,18 @@ class InsightsMiddleware(BaseHTTPMiddleware):
         logger, tracer = setup_logging(log_level=INFO)
         correlation_id = req.headers.get("X-Correlation-ID", str(uuid.uuid4()))
         tracer = trace.get_tracer(__name__)
-        reqbody: str = await req.json()
+        reqbody = ""
+        if req.method in ("POST", "PUT", "PATCH"):
+            try:
+                reqbody = await req.json()
+            except Exception:
+                reqbody = ""
         logger.info(reqbody)
         with tracer.start_as_current_span("request") as span:
             span.set_attribute("correlation_id", correlation_id)
             span.set_attribute("http.method", req.method)
-            span.set_attribute("http.url", req.url)
-            span.set_attribute("http.request.body", reqbody)
+            span.set_attribute("http.url", str(req.url))
+            span.set_attribute("http.request.body", str(reqbody))
             logger.info(f"Request {req.url.path} - Correlation ID: {correlation_id}")
             try:
                 start_time = time.perf_counter()

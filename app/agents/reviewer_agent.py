@@ -25,7 +25,7 @@ class ReviewerAgent:
             AzureChatCompletion(
                 deployment_name=self.config.REVIEWER_DEPLOYMENT_NAME,
                 api_key=self.config.REVIEWER_API_KEY,
-                base_url=self.config.REVIEWER_BASE_URL,
+                endpoint=self.config.REVIEWER_BASE_URL,
                 api_version=self.config.REVIEWER_API_VERSION,
             )
         )

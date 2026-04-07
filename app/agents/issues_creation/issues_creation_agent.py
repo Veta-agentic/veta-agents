@@ -26,7 +26,7 @@ class IssuesCreationAgent:
             AzureChatCompletion(
                 deployment_name=self.config.ISSUES_DEPLOYMENT_NAME,
                 api_key=self.config.ISSUES_API_KEY,
-                base_url=self.config.ISSUES_BASE_URL,
+                endpoint=self.config.ISSUES_BASE_URL,
                 api_version=self.config.ISSUES_API_VERSION,
             )
         )

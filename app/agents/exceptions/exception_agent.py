@@ -43,7 +43,7 @@ class ExceptionsAgent:
             AzureChatCompletion(
                 deployment_name=self.config.IMAGES_DEPLOYMENT_NAME,
                 api_key=self.config.IMAGES_API_KEY,
-                base_url=self.config.IMAGES_BASE_URL,
+                endpoint=self.config.IMAGES_BASE_URL,
                 api_version=self.config.WIKIS_API_VERSION,
             )
         )

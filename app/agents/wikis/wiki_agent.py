@@ -44,7 +44,7 @@ class WikiAgent:
             AzureChatCompletion(
                 deployment_name=self.config.WIKIS_DEPLOYMENT_NAME,
                 api_key=self.config.WIKIS_API_KEY,
-                base_url=self.config.WIKIS_BASE_URL,
+                endpoint=self.config.WIKIS_BASE_URL,
                 api_version=self.config.WIKIS_API_VERSION,
             )
         )
