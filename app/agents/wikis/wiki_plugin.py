@@ -1,4 +1,3 @@
-from typing import Optional
 
 from semantic_kernel.functions import kernel_function
 
@@ -9,7 +8,7 @@ class WikiPlugin:
     PLUGIN_NAME = "WikiSearch"
     DESCRIPTION = "A plugin that allows you to search for content in a wiki."
 
-    def __init__(self, wiki_urls: Optional[list[str]] = None, base_url_images: Optional[str] = None):
+    def __init__(self, wiki_urls: list[str] | None = None, base_url_images: str | None = None):
         self.urls = wiki_urls or []
         self.base_url_images = base_url_images
 

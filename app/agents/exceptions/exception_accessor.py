@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from azure.identity import ClientSecretCredential
 from azure.monitor.query import LogsQueryClient
@@ -64,7 +64,7 @@ class ExceptionAccessor:
 
         client = LogsQueryClient(credential)
 
-        end_time = datetime.now(timezone.utc)
+        end_time = datetime.now(UTC)
         start_time = end_time - timedelta(days=days)
         timespan = (start_time, end_time)
 

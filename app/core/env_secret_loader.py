@@ -1,7 +1,6 @@
 # app/core/env_secret_loader.py
 import logging
 import os
-from typing import Dict
 
 from .secret_loader import SecretLoader
 
@@ -9,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class EnvSecretLoader(SecretLoader):
-    def load_secrets(self) -> Dict[str, str]:
+    def load_secrets(self) -> dict[str, str]:
         """
         Loads secrets from environment variables.
         """

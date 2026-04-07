@@ -1,12 +1,11 @@
 # app/core/config.py
 import logging
-from typing import Dict
 
 logger = logging.getLogger(__name__)
 
 
 class Config:
-    def __init__(self, secrets: Dict[str, str], is_development: bool):
+    def __init__(self, secrets: dict[str, str], is_development: bool):
         """
         Takes a dictionary of secrets (e.g., from Env or KeyVault)
         and makes them available as attributes.
