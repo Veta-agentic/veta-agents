@@ -1,13 +1,12 @@
 import logging
 import os
 from logging import StreamHandler, getLogger
-from typing import Optional, Tuple
 
 from azure.monitor.opentelemetry import configure_azure_monitor
 from opentelemetry import trace
 
 
-def setup_logging(log_level: int = logging.INFO) -> Tuple[logging.Logger, Optional[trace.Tracer]]:
+def setup_logging(log_level: int = logging.INFO) -> tuple[logging.Logger, trace.Tracer | None]:
     connection_string = os.getenv("APPINSIGHTS_CONNECTION_STRING")
     app_name = "app"
 

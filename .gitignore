@@ -176,4 +176,8 @@ iac/TF/.terraform/
 iac/TF/terraform.tfvars
 iac/TF/terraform.tfstate.backup
 iac/TF/.terraform.lock.hcl
-*.tfvars
+*.tfplan
+
+# Allow environment-specific tfvars to be committed
+!iac/TF/terraform.prod.tfvars
+!iac/TF/terraform.dev.tfvars

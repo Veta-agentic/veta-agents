@@ -2,7 +2,6 @@
 import logging
 import os
 import threading
-from typing import Optional
 
 from .config import Config
 from .env_secret_loader import EnvSecretLoader
@@ -11,7 +10,7 @@ from .keyvault_secret_loader import KeyVaultSecretLoader
 logger = logging.getLogger(__name__)
 
 
-_cached_config: Optional[Config] = None
+_cached_config: Config | None = None
 _lock = threading.Lock()
 
 

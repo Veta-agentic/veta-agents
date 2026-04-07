@@ -1,4 +1,3 @@
-from typing import Optional
 
 from semantic_kernel.agents import ChatCompletionAgent
 from semantic_kernel.connectors.ai.open_ai import (
@@ -12,7 +11,7 @@ from app.core.config_factory import get_config
 
 
 class WikiAgent:
-    def __init__(self, wiki_urls: Optional[list[str]] = None, base_url_images: Optional[str] = None):
+    def __init__(self, wiki_urls: list[str] | None = None, base_url_images: str | None = None):
         self.name = "WikiAgent"
         self.description = "A chat agent that can access to some wiki pages."
         self.instructions = """
