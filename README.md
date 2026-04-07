@@ -621,5 +621,5 @@ See the [`docs/`](docs/index.md) folder for in-depth guides:
 
 Developed by **Jordi**, **David**, and **Jose**.
 
-License: Pending.
+License: [MIT](LICENSE)
 

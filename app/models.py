@@ -46,3 +46,9 @@ class ResponseModel(BaseModel):
     suggestions: list[str] | None
     prompt_tokens: str | None = "0"
     completion_tokens: str | None = "0"
+
+
+class ErrorResponseModel(BaseModel):
+    error: str
+    detail: str
+    correlation_id: str | None = None
