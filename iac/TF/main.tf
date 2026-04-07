@@ -107,6 +107,7 @@ module "storage_account" {
   resource_group_name             = azurerm_resource_group.this.name
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
+  shared_access_key_enabled       = true
   allow_nested_items_to_be_public = false
   https_traffic_only_enabled      = true
   enable_telemetry                = false
@@ -174,13 +175,14 @@ module "app_service_plan" {
   source  = "Azure/avm-res-web-serverfarm/azurerm"
   version = "2.0.2"
 
-  name             = local.resource_names.app_service_plan
-  location         = azurerm_resource_group.this.location
-  os_type          = "Linux"
-  parent_id        = azurerm_resource_group.this.id
-  sku_name         = var.app_service_sku
-  enable_telemetry = false
-  tags             = local.common_tags
+  name                  = local.resource_names.app_service_plan
+  location              = azurerm_resource_group.this.location
+  os_type               = "Linux"
+  parent_id             = azurerm_resource_group.this.id
+  sku_name              = var.app_service_sku
+  zone_balancing_enabled = can(regex("^(P|EP)", var.app_service_sku)) ? true : false
+  enable_telemetry      = false
+  tags                  = local.common_tags
 }
 
 ###############################################################################

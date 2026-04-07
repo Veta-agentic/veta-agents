@@ -367,9 +367,13 @@ else {
                 issuer    = "https://token.actions.githubusercontent.com"
                 subject   = "repo:${GitHubRepo}:ref:refs/heads/main"
                 audiences = @("api://AzureADTokenExchange")
-            } | ConvertTo-Json -Compress
-            az ad app federated-credential create --id $appObjectId --parameters $mainCredParams -o none
-            Assert-ExitCode "Failed to create main branch federated credential."
+            } | ConvertTo-Json -Depth 5
+            $mainCredFile = [System.IO.Path]::GetTempFileName()
+            $mainCredParams | Out-File -FilePath $mainCredFile -Encoding utf8
+            az ad app federated-credential create --id $appObjectId --parameters "@$mainCredFile" -o none
+            $credExitCode = $LASTEXITCODE
+            Remove-Item $mainCredFile -ErrorAction SilentlyContinue
+            if ($credExitCode -ne 0) { throw "Failed to create main branch federated credential." }
             Write-Success "Federated credential created for main branch"
         }
 
@@ -386,9 +390,13 @@ else {
                 issuer    = "https://token.actions.githubusercontent.com"
                 subject   = "repo:${GitHubRepo}:pull_request"
                 audiences = @("api://AzureADTokenExchange")
-            } | ConvertTo-Json -Compress
-            az ad app federated-credential create --id $appObjectId --parameters $prCredParams -o none
-            Assert-ExitCode "Failed to create pull request federated credential."
+            } | ConvertTo-Json -Depth 5
+            $prCredFile = [System.IO.Path]::GetTempFileName()
+            $prCredParams | Out-File -FilePath $prCredFile -Encoding utf8
+            az ad app federated-credential create --id $appObjectId --parameters "@$prCredFile" -o none
+            $credExitCode = $LASTEXITCODE
+            Remove-Item $prCredFile -ErrorAction SilentlyContinue
+            if ($credExitCode -ne 0) { throw "Failed to create pull request federated credential." }
             Write-Success "Federated credential created for pull requests"
         }
 
@@ -489,7 +497,7 @@ else {
 
         if ($webAppHostname) {
             $httpUrl = $webAppHostname
-            if ($httpUrl -notmatch '^https?://') { $httpUrl = "https://$httpUrl" }
+            if ($httpUrl -notlike "https://*" -and $httpUrl -notlike "http://*") { $httpUrl = "https://$httpUrl" }
             $variables["HTTP_URL"] = "$httpUrl/ask"
         }
 
@@ -566,7 +574,7 @@ else {
 
         # Health check
         $healthUrl = $webAppHostname
-        if ($healthUrl -and $healthUrl -notmatch '^https?://') { $healthUrl = "https://$healthUrl" }
+        if ($healthUrl -and $healthUrl -notlike "https://*" -and $healthUrl -notlike "http://*") { $healthUrl = "https://$healthUrl" }
 
         if ($healthUrl) {
             Write-Status "Waiting for Web App to respond..."
@@ -638,7 +646,7 @@ if ($script:deployedOutputs) {
 # URLs
 if ($webAppHostname) {
     $baseUrl = $webAppHostname
-    if ($baseUrl -notmatch '^https?://') { $baseUrl = "https://$baseUrl" }
+    if ($baseUrl -notlike "https://*" -and $baseUrl -notlike "http://*") { $baseUrl = "https://$baseUrl" }
     Write-Host "  URLs:" -ForegroundColor White
     Write-Host "    Web App     : $baseUrl" -ForegroundColor Cyan
     Write-Host "    OpenAPI     : $baseUrl/openapi.json" -ForegroundColor Cyan
