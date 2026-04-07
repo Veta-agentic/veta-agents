@@ -1,0 +1,41 @@
+# terraform.tfvars.example
+# Copy this file to terraform.tfvars and fill in your values
+
+# Azure Subscription
+subscription_id = "00000000-0000-0000-0000-000000000000"
+
+# Environment Configuration
+environment  = "dev"      # Options: dev, staging, prod
+project_name = "GHBot"
+
+# Resource Configuration
+location            = "westus2"
+cognitive_location  = "eastus"
+
+# App Service Plan Configuration
+app_service_sku = "P0v3"  # Options: P0v3, P1v3, P2v3, etc.
+
+# Cognitive Services Configuration
+gpt_model_name         = "gpt-4o"
+gpt_model_version      = "2024-11-20"
+embedding_model_name   = "text-embedding-3-small"
+embedding_model_version = "1"
+
+# Container Registry Configuration
+acr_sku = "Basic"  # Options: Basic, Standard, Premium
+
+# Storage Configuration
+storage_account_tier             = "Standard"
+storage_account_replication_type = "LRS"  # Options: LRS, GRS, RAGRS, ZRS
+
+# Tags
+owner       = "your-team@example.com"
+cost_center = "engineering"
+
+# Key Vault Secrets (JSON format)
+# key_vault_secrets = <<-EOT
+# {
+#   "GITHUB_TOKEN": "ghp_xxxxx",
+#   "GITHUB_WEBHOOK_SECRET": "your_webhook_secret"
+# }
+# EOT

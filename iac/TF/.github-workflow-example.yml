@@ -1,0 +1,83 @@
+# Terraform CI/CD Pipeline Example for GitHub Actions
+# Place this file in: .github/workflows/terraform.yml
+
+name: 'Terraform'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'iac/TF/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'iac/TF/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  TF_VERSION: '1.5.0'
+  WORKING_DIR: './iac/TF'
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    environment: production
+    
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.WORKING_DIR }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TF_VERSION }}
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Terraform Format Check
+      id: fmt
+      run: terraform fmt -check -recursive
+      continue-on-error: true
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: plan
+      if: github.event_name == 'pull_request'
+      run: terraform plan -no-color -input=false
+      continue-on-error: true
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
+
+# Required GitHub Secrets:
+# - AZURE_CLIENT_ID: Azure AD Service Principal Client ID
+# - AZURE_TENANT_ID: Azure AD Tenant ID
+# - AZURE_SUBSCRIPTION_ID: Azure Subscription ID
+#
+# Setup Azure credentials for GitHub Actions:
+# https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure
