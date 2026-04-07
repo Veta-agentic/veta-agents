@@ -4,7 +4,7 @@
 terraform {
   backend "azurerm" {
     resource_group_name  = "terraform-state-rg"
-    storage_account_name = "tfstate"  # Must be globally unique - update this!
+    storage_account_name = "tfstate" # Must be globally unique - update this!
     container_name       = "tfstate"
     key                  = "veta-agents.terraform.tfstate"
     use_azuread_auth     = true

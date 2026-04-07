@@ -119,6 +119,16 @@ variable "key_vault_secrets" {
 }
 
 ###############################################################################
+# Networking / Private Endpoints
+###############################################################################
+
+variable "enable_private_endpoints" {
+  description = "When true, deploys a VNet with private endpoints for Key Vault, Storage, ACR, Cognitive Services, and restricts Web App access via VNet integration."
+  type        = bool
+  default     = false
+}
+
+###############################################################################
 # Tags
 ###############################################################################
 

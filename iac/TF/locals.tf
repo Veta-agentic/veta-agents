@@ -16,7 +16,13 @@ locals {
     cognitive_account  = "oai-${var.project_name}-${local.suffix}"
     storage_account    = "st${var.project_name}${local.suffix}"
     container_registry = "cr${var.project_name}${local.suffix}"
+    vnet               = "vnet-${var.project_name}-${local.suffix}"
+    snet_pe            = "snet-pe-${var.project_name}-${local.suffix}"
+    snet_webapp        = "snet-webapp-${var.project_name}-${local.suffix}"
   }
+
+  # ACR must be Premium when private endpoints are enabled
+  effective_acr_sku = var.enable_private_endpoints ? "Premium" : var.acr_sku
 
   common_tags = merge({
     Project     = var.project_name

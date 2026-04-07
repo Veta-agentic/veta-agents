@@ -59,11 +59,12 @@ module "cognitive_account" {
   source  = "Azure/avm-res-cognitiveservices-account/azurerm"
   version = "0.11.0"
 
-  name      = local.resource_names.cognitive_account
-  location  = var.openai_location
-  parent_id = azurerm_resource_group.this.id
-  kind      = "OpenAI"
-  sku_name  = "S0"
+  name                          = local.resource_names.cognitive_account
+  location                      = var.openai_location
+  parent_id                     = azurerm_resource_group.this.id
+  kind                          = "OpenAI"
+  sku_name                      = "S0"
+  public_network_access_enabled = var.enable_private_endpoints ? false : true
 
   cognitive_deployments = {
     gpt4o = {
@@ -109,6 +110,7 @@ module "storage_account" {
   account_replication_type        = "LRS"
   shared_access_key_enabled       = true
   allow_nested_items_to_be_public = false
+  public_network_access_enabled   = var.enable_private_endpoints ? false : true
   https_traffic_only_enabled      = true
   enable_telemetry                = false
   tags                            = local.common_tags
@@ -122,14 +124,15 @@ module "container_registry" {
   source  = "Azure/avm-res-containerregistry-registry/azurerm"
   version = "0.5.1"
 
-  name                    = local.resource_names.container_registry
-  location                = azurerm_resource_group.this.location
-  resource_group_name     = azurerm_resource_group.this.name
-  sku                     = var.acr_sku
-  admin_enabled           = var.acr_admin_enabled
-  zone_redundancy_enabled = false
-  enable_telemetry        = false
-  tags                    = local.common_tags
+  name                          = local.resource_names.container_registry
+  location                      = azurerm_resource_group.this.location
+  resource_group_name           = azurerm_resource_group.this.name
+  sku                           = local.effective_acr_sku
+  admin_enabled                 = var.acr_admin_enabled
+  public_network_access_enabled = var.enable_private_endpoints ? false : true
+  zone_redundancy_enabled       = false
+  enable_telemetry              = false
+  tags                          = local.common_tags
 }
 
 ###############################################################################
@@ -148,10 +151,10 @@ module "key_vault" {
   enable_telemetry = false
   tags             = local.common_tags
 
-  # Allow Azure services and deployer access
+  # Allow Azure services and deployer access; deny public when PE enabled
   network_acls = {
     bypass         = "AzureServices"
-    default_action = "Allow"
+    default_action = var.enable_private_endpoints ? "Deny" : "Allow"
   }
 
   # Grant deployer permission to manage secrets during apply
@@ -175,14 +178,14 @@ module "app_service_plan" {
   source  = "Azure/avm-res-web-serverfarm/azurerm"
   version = "2.0.2"
 
-  name                  = local.resource_names.app_service_plan
-  location              = azurerm_resource_group.this.location
-  os_type               = "Linux"
-  parent_id             = azurerm_resource_group.this.id
-  sku_name              = var.app_service_sku
+  name                   = local.resource_names.app_service_plan
+  location               = azurerm_resource_group.this.location
+  os_type                = "Linux"
+  parent_id              = azurerm_resource_group.this.id
+  sku_name               = var.app_service_sku
   zone_balancing_enabled = can(regex("^(P|EP)", var.app_service_sku)) ? true : false
-  enable_telemetry      = false
-  tags                  = local.common_tags
+  enable_telemetry       = false
+  tags                   = local.common_tags
 }
 
 ###############################################################################
@@ -202,6 +205,8 @@ module "web_app" {
   https_only               = true
   enable_telemetry         = false
   tags                     = local.common_tags
+
+  virtual_network_subnet_id = var.enable_private_endpoints ? azurerm_subnet.webapp[0].id : null
 
   managed_identities = {
     system_assigned = true

@@ -28,6 +28,9 @@ acr_sku = "Basic"  # Options: Basic, Standard, Premium
 storage_account_tier             = "Standard"
 storage_account_replication_type = "LRS"  # Options: LRS, GRS, RAGRS, ZRS
 
+# Private Endpoints — deploy VNet + private endpoints for all services
+enable_private_endpoints = false  # Set to true to enable private networking
+
 # Tags
 owner       = "your-team@example.com"
 cost_center = "engineering"

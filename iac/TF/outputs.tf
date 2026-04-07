@@ -112,3 +112,19 @@ output "container_registry_name" {
   description = "Name of the Container Registry."
   value       = module.container_registry.name
 }
+
+# ── Private Endpoints (conditional) ─────────────────────────────────────────
+output "vnet_id" {
+  description = "Resource ID of the Virtual Network (only when private endpoints are enabled)."
+  value       = var.enable_private_endpoints ? azurerm_virtual_network.this[0].id : null
+}
+
+output "private_endpoint_ids" {
+  description = "Map of service to Private Endpoint resource ID (only when private endpoints are enabled)."
+  value = var.enable_private_endpoints ? {
+    key_vault          = azurerm_private_endpoint.keyvault[0].id
+    storage_account    = azurerm_private_endpoint.blob[0].id
+    container_registry = azurerm_private_endpoint.acr[0].id
+    cognitive_account  = azurerm_private_endpoint.openai[0].id
+  } : {}
+}
