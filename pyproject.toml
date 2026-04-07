@@ -11,7 +11,7 @@ dependencies = [
     "opentelemetry-api",
     "httpx",
     "beautifulsoup4",
-    "semantic-kernel",
+    "semantic-kernel>=1.41.0",
     "python-dotenv",
     "azure-keyvault-secrets",
     "pillow",
@@ -33,3 +33,5 @@ dev = [
 
 [tool.uv]
 default-groups = ["dev"]
+prerelease = "allow"
+override-dependencies = ["av>=13.1.0,<14"]

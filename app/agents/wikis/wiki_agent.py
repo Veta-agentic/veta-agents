@@ -1,14 +1,11 @@
 from typing import Optional
 
-from semantic_kernel.agents.chat_completion.chat_completion_agent import (
-    ChatCompletionAgent,
-)
-from semantic_kernel.connectors.ai.open_ai import AzureChatPromptExecutionSettings
-from semantic_kernel.connectors.ai.open_ai.services.azure_chat_completion import (
+from semantic_kernel.agents import ChatCompletionAgent
+from semantic_kernel.connectors.ai.open_ai import (
     AzureChatCompletion,
+    AzureChatPromptExecutionSettings,
 )
 from semantic_kernel.functions.kernel_arguments import KernelArguments
-from semantic_kernel.kernel import Kernel
 
 from app.agents.wikis.wiki_plugin import WikiPlugin
 from app.core.config_factory import get_config
@@ -39,23 +36,14 @@ class WikiAgent:
 
     def build_agent(self) -> ChatCompletionAgent:
         settings = AzureChatPromptExecutionSettings()
-        # settings.response_format = WikiContents
-        kernel = Kernel()
-        kernel.add_service(
-            AzureChatCompletion(
+        return ChatCompletionAgent(
+            service=AzureChatCompletion(
                 deployment_name=self.config.WIKIS_DEPLOYMENT_NAME,
                 api_key=self.config.WIKIS_API_KEY,
                 base_url=self.config.WIKIS_BASE_URL,
                 api_version=self.config.WIKIS_API_VERSION,
-            )
-        )
-        kernel.add_plugin(
-            WikiPlugin(wiki_urls=self.wiki_urls, base_url_images=self.base_url_images),
-            plugin_name=WikiPlugin.PLUGIN_NAME,
-        )
-
-        return ChatCompletionAgent(
-            kernel=kernel,
+            ),
+            plugins=[WikiPlugin(wiki_urls=self.wiki_urls, base_url_images=self.base_url_images)],
             name=self.name,
             description=self.description,
             instructions=self.instructions,
