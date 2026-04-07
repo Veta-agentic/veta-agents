@@ -77,6 +77,7 @@ output "app_insights_connection_string" {
 output "app_insights_instrumentation_key" {
   description = "Instrumentation key for Application Insights."
   value       = module.app_insights.instrumentation_key
+  sensitive   = true
 }
 
 # ── Cognitive Services / OpenAI ─────────────────────────────────────────────
