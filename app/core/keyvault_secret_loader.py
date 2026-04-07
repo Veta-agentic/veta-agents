@@ -1,6 +1,5 @@
 # app/core/keyvault_secret_loader.py
 import logging
-from typing import Dict
 
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
@@ -17,7 +16,7 @@ class KeyVaultSecretLoader(SecretLoader):
         """
         self.vault_name = vault_name
 
-    def load_secrets(self) -> Dict[str, str]:
+    def load_secrets(self) -> dict[str, str]:
         logger.info("Loading secrets from Key Vault...")
         secrets = {}
 
