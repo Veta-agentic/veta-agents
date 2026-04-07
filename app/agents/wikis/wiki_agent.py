@@ -1,4 +1,3 @@
-
 from semantic_kernel.agents import ChatCompletionAgent
 from semantic_kernel.connectors.ai.open_ai import (
     AzureChatCompletion,
