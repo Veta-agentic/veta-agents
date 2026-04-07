@@ -1,10 +1,5 @@
-from semantic_kernel.agents.chat_completion.chat_completion_agent import (
-    ChatCompletionAgent,
-)
-from semantic_kernel.connectors.ai.open_ai.services.azure_chat_completion import (
-    AzureChatCompletion,
-)
-from semantic_kernel.kernel import Kernel
+from semantic_kernel.agents import ChatCompletionAgent
+from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 
 from app.agents.exceptions.exception_plugin import ExceptionPlugin
 from app.core.config_factory import get_config
@@ -38,28 +33,22 @@ class ExceptionsAgent:
         self.days = days
 
     def build_agent(self) -> ChatCompletionAgent:
-        kernel = Kernel()
-        kernel.add_service(
-            AzureChatCompletion(
+        return ChatCompletionAgent(
+            service=AzureChatCompletion(
                 deployment_name=self.config.IMAGES_DEPLOYMENT_NAME,
                 api_key=self.config.IMAGES_API_KEY,
                 endpoint=self.config.IMAGES_BASE_URL,
                 api_version=self.config.WIKIS_API_VERSION,
-            )
-        )
-        kernel.add_plugin(
-            ExceptionPlugin(
-                azure_tenant=self.azure_tenant,
-                azure_client_id=self.azure_client_id,
-                azure_client_secret=self.azure_client_secret,
-                log_workspace_id=self.log_workspace_id,
-                days=self.days,
             ),
-            plugin_name=ExceptionPlugin.PLUGIN_NAME,
-        )
-
-        return ChatCompletionAgent(
-            kernel=kernel,
+            plugins=[
+                ExceptionPlugin(
+                    azure_tenant=self.azure_tenant,
+                    azure_client_id=self.azure_client_id,
+                    azure_client_secret=self.azure_client_secret,
+                    log_workspace_id=self.log_workspace_id,
+                    days=self.days,
+                )
+            ],
             name=self.name,
             description=self.description,
             instructions=self.instructions,

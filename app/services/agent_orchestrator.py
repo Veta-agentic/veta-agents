@@ -1,7 +1,7 @@
 import logging
 
 from semantic_kernel.agents import AgentGroupChat
-from semantic_kernel.agents.strategies import TerminationStrategy
+from semantic_kernel.agents.strategies.termination.termination_strategy import TerminationStrategy
 from semantic_kernel.contents.chat_message_content import ChatMessageContent
 
 from app.agents.exceptions.exception_agent import ExceptionsAgent

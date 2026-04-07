@@ -1,4 +1,3 @@
-
 from semantic_kernel.functions import kernel_function
 
 from app.agents.wikis.wiki_accessor import WebAccessor, WikiContents
