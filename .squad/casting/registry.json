@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "persistent_name": "Morpheus",
+      "role": "Lead / DevOps",
+      "universe": "matrix",
+      "created_at": "2026-04-07T11:14:00Z",
+      "legacy_named": true,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Trinity",
+      "role": "Backend Dev",
+      "universe": "matrix",
+      "created_at": "2026-04-07T11:14:00Z",
+      "legacy_named": true,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Tank",
+      "role": "Tester",
+      "universe": "matrix",
+      "created_at": "2026-04-07T16:11:00Z",
+      "legacy_named": false,
+      "status": "active"
+    },
+    {
+      "persistent_name": "Oracle",
+      "role": "Docs / DevRel",
+      "universe": "matrix",
+      "created_at": "2026-04-07T16:11:00Z",
+      "legacy_named": false,
+      "status": "active"
+    }
+  ]
+}
