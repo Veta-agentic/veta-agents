@@ -177,3 +177,4 @@ iac/TF/terraform.tfvars
 iac/TF/terraform.tfstate.backup
 iac/TF/.terraform.lock.hcl
 *.tfvars
+*.tfplan
