@@ -13,3 +13,7 @@
 - 2026-04-07: Three federated creds exist: github-actions-main, github-actions-pr, github-env-production
 - 2026-04-07: IaC uses AVM modules, zone_balancing conditional, shared_access_key_enabled=false for storage
 - 2026-04-07: deploy-all.ps1 requires pwsh (PS7), uses temp file JSON for federated creds
+- 2025-07-25: Added `enable_private_endpoints` toggle (default false) — VNet, private DNS zones, PEs for KV/Storage/ACR/OpenAI, webapp VNet integration, network ACL tightening. All in `private_endpoints.tf` using `count` pattern.
+- 2025-07-25: ACR private endpoints require Premium SKU — use `local.effective_acr_sku` to auto-upgrade when PE enabled
+- 2025-07-25: Resolved duplicate provider config: merged `versions.tf` features into `providers.tf` and deleted `versions.tf`
+- 2025-07-25: AVM modules (storage v0.6.8, ACR v0.5.1, cognitive v0.11.0, web v0.21.8, keyvault v0.10.2) all accept `public_network_access_enabled` and `virtual_network_subnet_id` parameters directly
